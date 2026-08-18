@@ -38,6 +38,27 @@ app.post('/sign-up', async (req, res) => {
     }
 })
 
+app.post('/create-subscription', async (req, res) => {
+    try {
+        const { customer_id } = req.body;
+        const session = await stripe.checkout.sessions.create({
+            mode: "subscription",
+            line_items: [{
+                price:"price_1S5TCxQ6edAtiKkxNZRLjseA",
+                quantity: 1
+            }],
+            customer: customer_id,
+            ui_mode: "hosted_page",
+            success_url: "https://stripe.com"
+        });
+
+        res.status(200).json({ url: session.url });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+        console.error("Failed to create subscription: ", error.message);
+    }
+})
+
 app.post('/create-checkout-session', async (req, res) => {
     try {
         const { customer_id } = req.body;
@@ -75,6 +96,40 @@ app.post('/set-default-payment-method', async (req, res) => {
     } catch (error) {
         res.status(400).json({ error: error.message });
         console.error("Failed to update customer's default payment method: ", error.message);
+    }
+})
+
+app.post('/create-credits-contract', async (req, res) => {
+    try {
+        const { customer_id } = req.body;
+        const date = new Date();
+        date.setMinutes(0, 0, 0);
+        const startingAt = date.toISOString();
+        const contract = await metronome.v1.contracts.create({
+            customer_id: customer_id,
+            rate_card_id: '9baa9942-a550-47b0-80ed-637c51c87118',
+            starting_at: startingAt,
+            recurring_credits: [{
+                starting_at: startingAt,
+                product_id: '266900ae-f09a-4df9-ac09-fdc3bd2fe2c6',
+                access_amount: {
+                    unit_price: 1000,
+                    credit_type_id: 'f984e650-b20d-4a95-af49-970d4e233cdb',
+                    quantity: 1,
+                },
+                priority: 1,
+                commit_duration: {
+                    value: 1,
+                    unit:'periods'
+                },
+                recurrence_frequency: 'monthly',
+            }],
+        });
+
+        res.status(200).json({ contract: contract.data.id });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+        console.error("Failed to create credits contract: ", error.message);
     }
 })
 
@@ -131,9 +186,7 @@ app.post('/create-contract', async (req, res) => {
             }],
         });
         res.status(200).json({ 
-            id: contract.data.id,
-            product: contract.data.product.name,
-            credit: contract.data.credits.scheduled_items.amount
+            id: contract.data.id
         });
         console.log('Contract Created');
         

@@ -13,9 +13,21 @@
   </div>
 
   <div class="page">
+    <div class="layout">
+
+    <div class="main-col">
     <div class="page-header">
       <h1>Usage-based billing, step by step</h1>
       <p>Follow along as this demo calls the Stripe and Metronome APIs in real time. Every request and response is shown exactly as the server sends it.</p>
+    </div>
+
+    <div class="flow-toggle" id="flow-toggle">
+      <button class="flow-toggle-btn is-active" data-flow="contract" type="button">
+        Metronome Subscription
+      </button>
+      <button class="flow-toggle-btn" data-flow="subscription" type="button">
+        Stripe Subscription
+      </button>
     </div>
 
     <div class="stepper" id="stepper">
@@ -52,7 +64,7 @@
       </div>
 
       <!-- Step 2: Add payment method -->
-      <div class="step is-disabled" id="step-checkout" data-step="2">
+      <div class="step is-disabled" id="step-checkout" data-step="2" data-flow="contract">
         <div class="step-rail"><div class="step-dot">2</div></div>
         <div class="step-card">
           <div class="step-card-head">
@@ -70,7 +82,7 @@
       </div>
 
       <!-- Step 3: Set default payment method -->
-      <div class="step is-disabled" id="step-default-pm" data-step="3">
+      <div class="step is-disabled" id="step-default-pm" data-step="3" data-flow="contract">
         <div class="step-rail"><div class="step-dot">3</div></div>
         <div class="step-card">
           <div class="step-card-head">
@@ -88,7 +100,7 @@
       </div>
 
       <!-- Step 4: Create contract (placeholder, wired up in a later pass) -->
-      <div class="step is-disabled" id="step-contract" data-step="4">
+      <div class="step is-disabled" id="step-contract" data-step="4" data-flow="contract">
         <div class="step-rail"><div class="step-dot">4</div></div>
         <div class="step-card">
           <div class="step-card-head">
@@ -102,6 +114,42 @@
             <span class="label">Create contract</span>
           </button>
           <div class="api-panel" id="panel-contract"></div>
+        </div>
+      </div>
+
+      <!-- Flow B, Step 2: Create subscription -->
+      <div class="step is-disabled" id="step-subscription" data-step="2" data-flow="subscription">
+        <div class="step-rail"><div class="step-dot">2</div></div>
+        <div class="step-card">
+          <div class="step-card-head">
+            <h3 class="step-title">Create subscription</h3>
+            <span class="step-status pending" data-status>Waiting</span>
+          </div>
+          <p class="step-desc">Starts a Stripe Checkout Session in subscription mode, so the customer adds a card and subscribes to the base plan in one step.</p>
+          <div class="endpoint-tag"><span class="method">POST</span> /create-subscription</div>
+          <button class="btn" id="btn-subscription" type="button" disabled>
+            <span class="spinner"></span>
+            <span class="label">Start checkout</span>
+          </button>
+          <div class="api-panel" id="panel-subscription"></div>
+        </div>
+      </div>
+
+      <!-- Flow B, Step 3: Create credits contract -->
+      <div class="step is-disabled" id="step-credits-contract" data-step="3" data-flow="subscription">
+        <div class="step-rail"><div class="step-dot">3</div></div>
+        <div class="step-card">
+          <div class="step-card-head">
+            <h3 class="step-title">Create contract</h3>
+            <span class="step-status pending" data-status>Waiting</span>
+          </div>
+          <p class="step-desc">Creates a Metronome contract that only grants recurring credits, billed through Stripe — no embedded subscription.</p>
+          <div class="endpoint-tag"><span class="method">POST</span> /create-credits-contract</div>
+          <button class="btn" id="btn-credits-contract" type="button" disabled>
+            <span class="spinner"></span>
+            <span class="label">Create contract</span>
+          </button>
+          <div class="api-panel" id="panel-credits-contract"></div>
         </div>
       </div>
 
@@ -122,6 +170,63 @@
           <div class="api-panel" id="panel-usage"></div>
         </div>
       </div>
+
+    </div>
+    </div>
+
+    <aside class="sidebar">
+      <div class="sidebar-card">
+        <h2 class="sidebar-title">Test customer</h2>
+        <dl class="info-list" id="customer-info">
+          <div class="info-row">
+            <dt>Name</dt>
+            <dd data-field="name">—</dd>
+          </div>
+          <div class="info-row">
+            <dt>Email</dt>
+            <dd data-field="email">—</dd>
+          </div>
+          <div class="info-row">
+            <dt>Stripe customer</dt>
+            <dd data-field="stripeCustomerId">—</dd>
+          </div>
+          <div class="info-row">
+            <dt>Metronome customer</dt>
+            <dd data-field="metronomeCustomerId">—</dd>
+          </div>
+          <div class="info-row">
+            <dt>Contract</dt>
+            <dd data-field="contractId">—</dd>
+          </div>
+        </dl>
+      </div>
+
+      <div class="sidebar-card">
+        <h2 class="sidebar-title">Demo checklist</h2>
+        <ul class="checklist" id="checklist">
+          <li class="checklist-item is-active" data-checklist-step="1">
+            <span class="checklist-icon"></span>
+            <span class="checklist-label">Create customer</span>
+          </li>
+          <li class="checklist-item is-pending" data-checklist-step="2">
+            <span class="checklist-icon"></span>
+            <span class="checklist-label">Add payment method</span>
+          </li>
+          <li class="checklist-item is-pending" data-checklist-step="3">
+            <span class="checklist-icon"></span>
+            <span class="checklist-label">Set default payment method</span>
+          </li>
+          <li class="checklist-item is-pending" data-checklist-step="4">
+            <span class="checklist-icon"></span>
+            <span class="checklist-label">Create contract</span>
+          </li>
+          <li class="checklist-item is-pending" data-checklist-step="5">
+            <span class="checklist-icon"></span>
+            <span class="checklist-label">Send usage event</span>
+          </li>
+        </ul>
+      </div>
+    </aside>
 
     </div>
   </div>
