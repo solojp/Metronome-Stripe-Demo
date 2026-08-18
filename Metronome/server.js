@@ -1,4 +1,5 @@
 require("dotenv").config();
+const crypto = require("crypto");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const { Metronome } = require("@metronome/sdk");
 const metronome = new Metronome({ bearerToken: process.env.METRONOME_SECRET_KEY });
@@ -27,8 +28,8 @@ app.post('/sign-up', async (req, res) => {
             }]
         });
         res.json({
-            id: stripeCustomer.id
-            // To do: Cache username to simulate logged in user. 
+            stripe_customer_id: stripeCustomer.id,
+            metronome_customer_id: metronomeCustomer.data.id
         });
     }
     catch (error) {
@@ -39,28 +40,52 @@ app.post('/sign-up', async (req, res) => {
 
 app.post('/create-checkout-session', async (req, res) => {
     try {
+        const { customer_id } = req.body;
         const session = await stripe.checkout.sessions.create({
             mode: "setup",
-            customer: 'cus_V1y0au647WniAB',
+            customer: customer_id,
             payment_method_types: ["card"],
             ui_mode: "hosted_page",
             success_url: "https://stripe.com"
         });
         res.status(200).json({ url: session.url });  
     } catch (error) {
-        res.status(400).json({ error: error.message })
+        res.status(400).json({ error: error.message });
         console.error("Failed to save payment method: " ,error.message);
+    }   
+})
+
+app.post('/set-default-payment-method', async (req, res) => {
+    try {
+        const { customer_id } = req.body;
+        const payment_method = await stripe.customers.listPaymentMethods(
+            customer_id, 
+            {limit: 1}
+        );
+        const payment_method_id = payment_method.data[0].id
+        const customer = await stripe.customers.update(
+            customer_id, 
+            {
+                invoice_settings: {
+                    default_payment_method: payment_method_id
+                }
+            }
+        );
+        res.status(200).json({ message: "Customer default payment method has been updated"});
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+        console.error("Failed to update customer's default payment method: ", error.message);
     }
-    
 })
 
 app.post('/create-contract', async (req, res) => {
     try {
+        const { customer_id } = req.body;
         const date = new Date();
         date.setMinutes(0, 0, 0);
         const startingAt = date.toISOString();
         const contract = await metronome.v1.contracts.create({
-            customer_id: '532f2699-d8c9-42d7-b8c1-a8922b707683',
+            customer_id: customer_id,
             rate_card_id: '9baa9942-a550-47b0-80ed-637c51c87118',
             starting_at: startingAt,
             billing_provider_configuration: {
@@ -105,7 +130,11 @@ app.post('/create-contract', async (req, res) => {
                 },
             }],
         });
-        res.status(200).json({ contract });
+        res.status(200).json({ 
+            id: contract.data.id,
+            product: contract.data.product.name,
+            credit: contract.data.credits.scheduled_items.amount
+        });
         console.log('Contract Created');
         
     } catch (error) {
@@ -116,16 +145,17 @@ app.post('/create-contract', async (req, res) => {
 
 app.post('/post-usage', async (req, res) => {
     try {
+        const { customer_id } = req.body
         const date = new Date();
         const timeStamp = date.toISOString();
         const usage = await metronome.v1.usage.ingest({ usage: [{
             transaction_id: crypto.randomUUID(),
-            customer_id: '532f2699-d8c9-42d7-b8c1-a8922b707683',
+            customer_id: customer_id,
             event_type: 'usage',
             timestamp: timeStamp,
             properties: {
                 input_tokens: 20,
-                user_id: '001',
+                user_id: customer_id,
             }
         }]});
         res.status(200).json({  });

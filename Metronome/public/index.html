@@ -1,252 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            color: #333;
-            line-height: 1.6;
-        }
-
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 2rem;
-            background: #fff;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        header .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #635bff;
-        }
-
-        header nav a {
-            margin-left: 1.5rem;
-            text-decoration: none;
-            color: #555;
-            font-weight: 500;
-        }
-
-        header nav a:hover {
-            color: #635bff;
-        }
-
-        .hero {
-            text-align: center;
-            padding: 5rem 2rem;
-            background: linear-gradient(135deg, #635bff 0%, #7c3aed 100%);
-            color: #fff;
-        }
-
-        .hero h1 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-
-        .hero p {
-            font-size: 1.25rem;
-            max-width: 600px;
-            margin: 0 auto 2rem;
-            opacity: 0.9;
-        }
-
-        .hero .cta {
-            display: inline-block;
-            padding: 0.75rem 2rem;
-            background: #fff;
-            color: #635bff;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1rem;
-        }
-
-        .hero .cta:hover {
-            background: #f0f0f0;
-        }
-
-        .products {
-            padding: 4rem 2rem;
-            text-align: center;
-            background: #f9fafb;
-        }
-
-        .products h2 {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .products .subtitle {
-            color: #666;
-            margin-bottom: 3rem;
-            font-size: 1.1rem;
-        }
-
-        .cards {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            flex-wrap: wrap;
-            max-width: 1000px;
-            margin: 0 auto;
-        }
-
-        .card {
-            background: #fff;
-            border-radius: 12px;
-            padding: 2rem;
-            flex: 1;
-            min-width: 280px;
-            max-width: 320px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            text-align: left;
-        }
-
-        .card h3 {
-            font-size: 1.25rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .card .price {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #635bff;
-            margin-bottom: 1rem;
-        }
-
-        .card .price span {
-            font-size: 0.9rem;
-            font-weight: 400;
-            color: #666;
-        }
-
-        .card ul {
-            list-style: none;
-            margin-bottom: 1.5rem;
-        }
-
-        .card ul li {
-            padding: 0.4rem 0;
-            color: #555;
-        }
-
-        .card ul li::before {
-            content: "\2713";
-            color: #635bff;
-            margin-right: 0.5rem;
-            font-weight: 700;
-        }
-
-        .card .btn {
-            display: block;
-            text-align: center;
-            padding: 0.7rem;
-            background: #635bff;
-            color: #fff;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .card .btn:hover {
-            background: #4f46e5;
-        }
-
-        footer {
-            text-align: center;
-            padding: 2rem;
-            background: #1a1a2e;
-            color: #aaa;
-            font-size: 0.9rem;
-        }
-
-        footer a {
-            color: #ccc;
-            text-decoration: none;
-            margin: 0 0.75rem;
-        }
-
-        footer a:hover {
-            color: #fff;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Metronome Demo</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <div class="logo">Metronome</div>
-        <nav>
-            <a href="#">Home</a>
-            <a href="#">Products</a>
-            <a href="#">About</a>
-            <a href="#">Contact</a>
-        </nav>
-    </header>
 
-    <section class="hero">
-        <h1>Usage-Based Billing Made Simple</h1>
-        <p>Choose the subscription plan that fits your needs and scale as you grow.</p>
-        <a href="#products" class="cta">View Plans</a>
-    </section>
+  <div class="topbar">
+    <div class="logo">Metronome <span class="accent">&times;</span> Stripe</div>
+  </div>
 
-    <section class="products" id="products">
-        <h2>Subscription Plans</h2>
-        <p class="subtitle">Simple, transparent pricing for every stage of growth.</p>
-        <div class="cards">
-            <div class="card">
-                <h3>Starter</h3>
-                <div class="price">$29<span>/month</span></div>
-                <ul>
-                    <li>Up to 1,000 events</li>
-                    <li>Basic analytics</li>
-                    <li>Email support</li>
-                    <li>1 team member</li>
-                </ul>
-                <a href="#" class="btn">Get Started</a>
+  <div class="page">
+    <div class="page-header">
+      <h1>Usage-based billing, step by step</h1>
+      <p>Follow along as this demo calls the Stripe and Metronome APIs in real time. Every request and response is shown exactly as the server sends it.</p>
+    </div>
+
+    <div class="stepper" id="stepper">
+
+      <!-- Step 1: Sign up -->
+      <div class="step is-active" id="step-signup" data-step="1">
+        <div class="step-rail"><div class="step-dot">1</div></div>
+        <div class="step-card">
+          <div class="step-card-head">
+            <h3 class="step-title">Create customer</h3>
+            <span class="step-status pending" data-status>Not started</span>
+          </div>
+          <p class="step-desc">Creates a Customer in Stripe, then creates a matching Customer in Metronome linked to that Stripe customer for billing.</p>
+          <div class="endpoint-tag"><span class="method">POST</span> /sign-up</div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="input-name">Name</label>
+              <input id="input-name" type="text" placeholder="Ada Lovelace" value="Ada Lovelace">
             </div>
-            <div class="card">
-                <h3>Pro</h3>
-                <div class="price">$99<span>/month</span></div>
-                <ul>
-                    <li>Up to 50,000 events</li>
-                    <li>Advanced analytics</li>
-                    <li>Priority support</li>
-                    <li>5 team members</li>
-                </ul>
-                <a href="#" class="btn">Get Started</a>
+            <div class="field">
+              <label for="input-email">Email</label>
+              <input id="input-email" type="email" placeholder="ada@example.com" value="ada@example.com">
             </div>
-            <div class="card">
-                <h3>Enterprise</h3>
-                <div class="price">$299<span>/month</span></div>
-                <ul>
-                    <li>Unlimited events</li>
-                    <li>Custom dashboards</li>
-                    <li>Dedicated support</li>
-                    <li>Unlimited members</li>
-                </ul>
-                <a href="#" class="btn">Get Started</a>
-            </div>
+          </div>
+
+          <button class="btn" id="btn-signup" type="button">
+            <span class="spinner"></span>
+            <span class="label">Create customer</span>
+          </button>
+
+          <div class="api-panel" id="panel-signup"></div>
         </div>
-    </section>
+      </div>
 
-    <footer>
-        <p>
-            <a href="#">Privacy</a>
-            <a href="#">Terms</a>
-            <a href="#">Support</a>
-        </p>
-        <p style="margin-top: 0.75rem;">&copy; 2026 Metronome. All rights reserved.</p>
-    </footer>
+      <!-- Step 2: Add payment method -->
+      <div class="step is-disabled" id="step-checkout" data-step="2">
+        <div class="step-rail"><div class="step-dot">2</div></div>
+        <div class="step-card">
+          <div class="step-card-head">
+            <h3 class="step-title">Add payment method</h3>
+            <span class="step-status pending" data-status>Waiting</span>
+          </div>
+          <p class="step-desc">Starts a Stripe Checkout Session in setup mode so the customer can securely add a card.</p>
+          <div class="endpoint-tag"><span class="method">POST</span> /create-checkout-session</div>
+          <button class="btn" id="btn-checkout" type="button" disabled>
+            <span class="spinner"></span>
+            <span class="label">Start checkout</span>
+          </button>
+          <div class="api-panel" id="panel-checkout"></div>
+        </div>
+      </div>
+
+      <!-- Step 3: Set default payment method -->
+      <div class="step is-disabled" id="step-default-pm" data-step="3">
+        <div class="step-rail"><div class="step-dot">3</div></div>
+        <div class="step-card">
+          <div class="step-card-head">
+            <h3 class="step-title">Set default payment method</h3>
+            <span class="step-status pending" data-status>Waiting</span>
+          </div>
+          <p class="step-desc">Marks the most recently added card as the customer's default for automatic invoice charging.</p>
+          <div class="endpoint-tag"><span class="method">POST</span> /set-default-payment-method</div>
+          <button class="btn" id="btn-default-pm" type="button" disabled>
+            <span class="spinner"></span>
+            <span class="label">Set default</span>
+          </button>
+          <div class="api-panel" id="panel-default-pm"></div>
+        </div>
+      </div>
+
+      <!-- Step 4: Create contract (placeholder, wired up in a later pass) -->
+      <div class="step is-disabled" id="step-contract" data-step="4">
+        <div class="step-rail"><div class="step-dot">4</div></div>
+        <div class="step-card">
+          <div class="step-card-head">
+            <h3 class="step-title">Create contract</h3>
+            <span class="step-status pending" data-status>Waiting</span>
+          </div>
+          <p class="step-desc">Creates a Metronome contract with a monthly subscription and recurring credits, billed through Stripe.</p>
+          <div class="endpoint-tag"><span class="method">POST</span> /create-contract</div>
+          <button class="btn" id="btn-contract" type="button" disabled>
+            <span class="spinner"></span>
+            <span class="label">Create contract</span>
+          </button>
+          <div class="api-panel" id="panel-contract"></div>
+        </div>
+      </div>
+
+      <!-- Step 5: Post usage (placeholder, wired up in a later pass) -->
+      <div class="step is-disabled" id="step-usage" data-step="5">
+        <div class="step-rail"><div class="step-dot">5</div></div>
+        <div class="step-card">
+          <div class="step-card-head">
+            <h3 class="step-title">Send usage event</h3>
+            <span class="step-status pending" data-status>Waiting</span>
+          </div>
+          <p class="step-desc">Ingests a usage event into Metronome so it can be metered and billed on the next invoice.</p>
+          <div class="endpoint-tag"><span class="method">POST</span> /post-usage</div>
+          <button class="btn" id="btn-usage" type="button" disabled>
+            <span class="spinner"></span>
+            <span class="label">Send usage event</span>
+          </button>
+          <div class="api-panel" id="panel-usage"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="app.js"></script>
 </body>
 </html>
