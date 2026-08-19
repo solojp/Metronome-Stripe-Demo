@@ -207,7 +207,7 @@ app.post('/post-usage', async (req, res) => {
             event_type: 'usage',
             timestamp: timeStamp,
             properties: {
-                input_tokens: 20,
+                input_tokens: 100,
                 user_id: customer_id,
             }
         }]});
